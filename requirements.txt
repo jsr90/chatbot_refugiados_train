@@ -1,0 +1,7 @@
+wandb
+numpy
+argparse
+torch
+fastai
+datasets
+transformers
