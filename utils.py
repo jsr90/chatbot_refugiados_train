@@ -221,10 +221,12 @@ def train(config) -> None:
         logging_steps=10,
         per_device_train_batch_size=config.per_device_train_batch_size,
         per_device_eval_batch_size=config.per_device_eval_batch_size,
+        save_strategy=get_strategy(config.evaluation_strategy),
         evaluation_strategy=get_strategy(config.evaluation_strategy),
         eval_steps=20,
         warmup_steps=500,
-        weight_decay=0.01
+        weight_decay=0.01,
+        load_best_model_at_end=True
     )
     # get train and test datasets from given path
     data = prepare_data(config.path, config.test_size, config.seed, config.model_name)
