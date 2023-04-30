@@ -7,7 +7,6 @@
 - [Installation](#installation)
 - [Training](#training)
 - [Specifications](#specifications)
-- [SQuAD to custom](#squad_to_custom)
 
 
 ## Script Summary
