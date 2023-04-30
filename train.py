@@ -13,7 +13,7 @@ evaluation_strategies = ["no", "steps", "epoch"]
 # Define default configuration for the experiment
 config = SimpleNamespace(
     framework="fastai",
-    dir_path="/content/drive/Shareddrives/chatbot_refugiados/Chatbot_refugiados/",
+    dir_path="./",
     wandb_entity="jesus-saturdays/saturdays",
     wandb_project="chatbot_refugees",
     seed=42,
