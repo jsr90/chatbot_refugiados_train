@@ -79,6 +79,7 @@ To customize the training process, simply pass the desired values for these argu
     - train.py: Python file used for training the model.
     - utils.py: Python file with most of methods used.
     - data/data.json: SQuAD dataset
+    - requirements.txt
 
 The `utils.py` module consists of several utility functions used in the Question Answering project. Here is a brief summary of the functions:
 
