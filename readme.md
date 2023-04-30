@@ -29,7 +29,7 @@ First, you need to mount your Google Drive and navigate to the folder containing
 ```python
 from google.colab import drive
 drive.mount("/content/drive/", force_remount=True)
-%cd /content/drive/Shareddrives/chatbot_refugiados/Chatbot_refugiados
+%cd /content/drive/Shareddrives/chatbot_refugiados
 ```
 
 ## Installation
@@ -49,16 +49,20 @@ Before you start training, you can see the available command-line options and th
 
 The script accepts the following command-line arguments that allow you to customize the training process:
 
-1. `--seed`: (int) Random seed for reproducibility. Default: 42.
-2. `--dir_path`: (str) Path to the directory containing the project files. Default: "/content/drive/Shareddrives/chatbot_refugiados/Chatbot_refugiados/".
-3. `--wandb_entity`: (str) Weights & Biases entity name. Default: "jesus-saturdays/saturdays".
-4. `--wandb_project`: (str) Weights & Biases project name. Default: "chatbot_refugees".
-5. `--wandb_log_model`: (str) Save your trained model checkpoint to Weights & Biases. Default: "true".
-6. `--wandb_watch`: (str) Turn off watch to log faster in Weights & Biases. Default: "true".
-7. `--train_batch_size`: (str) Per-device train batch size. Default: 16.
-8. `--eval_batch_size`: (str) Per-device evaluation batch size. Default: 16.
-9. `--evaluation_strategy`: (int) Evaluation strategy, with the following options: 0 for "no", 1 for "steps", and 2 for "epoch". Default: 2.
-10. `--num_train_epochs`: (int) Number of epochs during training. Default: 25.
+1. `--seed` (int): random seed
+2. `--dir_path` (str): path to directory
+3. `--path` (str): relative path to SQuAD file
+4. `--wandb_entity` (str): W&B entity name
+5. `--wandb_project` (str): W&B project name
+6. `--wandb_log_model` (str): save your trained model checkpoint to wandb
+7. `--wandb_watch` (str): turn off watch to log faster
+8. `--train_batch_size` (str): per_device_train_batch_size
+9. `--eval_batch_size` (str): per_device_eval_batch_size
+10. `--evaluation_strategy` (int): 0:no, 1:steps, 2:epoch
+11. `--num_train_epochs` (int): number of epochs during training
+12. `--test_size` (float): size of test split. Default 0.2
+
+
 
 Finally, to start the training process, run:
 
@@ -73,89 +77,23 @@ To customize the training process, simply pass the desired values for these argu
 - The root directory must contain the following files and folders:
 
     - readme.md
-    - train.ipynb: Jupyter Notebook file used for execution in Google Colab.
     - train.py: Python file used for training the model.
-    - data/: Folder containing:
-        - train.json
-        - eval.json files.
+    - utils.py: Python file with most of methods used.
+    - data/data.json: SQuAD dataset
 
-- The format of the train.json and eval.json files must be as follows:
+The `utils.py` module consists of several utility functions used in the Question Answering project. Here is a brief summary of the functions:
 
-```json
-{
-    "data": [
-        {
-            "answers": {
-                "answer_start": int,
-                "text": [str]
-            },
-            "context": str,
-            "id": int,
-            "question": str
-        }        
-    ]
-}
- ```
- 
-## SQuAD to custom
+1. `transform_squad(path)`: This function reads a SQuAD file in JSON format and transforms it into a dictionary that can be easily used for training the model.
 
-The 'squad_to_custom.py' script is designed to process SQuAD (Stanford Question Answering Dataset) data, transform it to a custom format that is compatible with the 'train.py' script, and save it to a file. It takes SQuAD data as input, extracts the necessary information, and restructures it into a more convenient format for training machine learning models. The resulting file can then be used directly as input for the 'train.py' script.
+2. `get_train_test_val(path, test_size, seed)`: This function reads a SQuAD file and splits it into training and testing datasets. The path argument is the relative path to the SQuAD dataset, test_size is the size of the test partition (as a float between 0 and 1), and seed is a random seed to ensure reproducibility.
 
-To use the script, simply run it with the default configuration or specify custom arguments using the command line interface. For example:
+2. `set_vars(config)`: This function sets environment variables for WandB configuration. The config argument is an object that contains the necessary WandB configuration parameters (directory path, WandB entity, WandB project, WandB log model, and WandB watch).
 
-```
-python squad_to_custom.py --path <path_to_squad_file> --save_dir <path_to_save_directory>
-```
-Where <path_to_squad_file> is the path to the SQuAD file that you want to process, and <path_to_save_directory> is the directory where the resulting file will be saved.
+3. `get_strategy(i)`: This function returns the evaluation strategy based on the given index. The i argument is the index of the evaluation strategy, and the possible values are "no", "steps", and "epoch".
 
-SQuAD file structure:
+4. `set_seed(seed)`: This function sets the random seed for reproducibility. The seed argument is the random seed value.
 
-```
-{
-    "data": [
-        {
-            "title": "Title of the article",
-            "paragraphs": [
-                {
-                    "context": "Context of the paragraph",
-                    "qas": [
-                        {
-                            "id": "ID of the question",
-                            "question": "Question text",
-                            "answers": [
-                                {
-                                    "text": "Answer text",
-                                    "answer_start": 0
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-}
-```
-
-Custom format structure:
-
-```
-{
-    "data": [
-        {
-            "id": "ID of the question",
-            "question": "Question text",
-            "context": "Context of the paragraph",
-            "answers": {
-                "text": ["Answer text"],
-                "answer_start": 0
-            }
-        }
-    ]
-}
-```
-
-The resulting file will have the same structure as the custom format described above.
+5. `preprocess_function(examples: dict, model_name)`: This function preprocesses the input data using the tokenizer. The examples argument is a dictionary containing the raw data, and the model_name argument is the name of the pre-trained model to be used for tokenization. The function returns a dictionary containing the preprocessed data.
 
 
 
