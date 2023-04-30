@@ -219,8 +219,8 @@ def train(config: SimpleNamespace) -> None:
     wandb.finish()
 
 if __name__ == '__main__':
-  set_seed(config.seed)  
   wandb.login()
   parse_args()
+  set_seed(config.seed)
   set_vars()
   train(config)
