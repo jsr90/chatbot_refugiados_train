@@ -7,6 +7,7 @@
 - [Installation](#installation)
 - [Training](#training)
 - [Specifications](#specifications)
+- [SQuAD to custom](#squad_to_custom)
 
 
 ## Script Summary
@@ -95,3 +96,66 @@ To customize the training process, simply pass the desired values for these argu
     ]
 }
  ```
+ 
+## SQuAD to custom
+
+The 'squad_to_custom.py' script is designed to process SQuAD (Stanford Question Answering Dataset) data, transform it to a custom format that is compatible with the 'train.py' script, and save it to a file. It takes SQuAD data as input, extracts the necessary information, and restructures it into a more convenient format for training machine learning models. The resulting file can then be used directly as input for the 'train.py' script.
+
+To use the script, simply run it with the default configuration or specify custom arguments using the command line interface. For example:
+
+```
+python squad_to_custom.py --path <path_to_squad_file> --save_dir <path_to_save_directory>
+```
+Where <path_to_squad_file> is the path to the SQuAD file that you want to process, and <path_to_save_directory> is the directory where the resulting file will be saved.
+
+SQuAD file structure:
+
+```
+{
+    "data": [
+        {
+            "title": "Title of the article",
+            "paragraphs": [
+                {
+                    "context": "Context of the paragraph",
+                    "qas": [
+                        {
+                            "id": "ID of the question",
+                            "question": "Question text",
+                            "answers": [
+                                {
+                                    "text": "Answer text",
+                                    "answer_start": 0
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+Custom format structure:
+
+```
+{
+    "data": [
+        {
+            "id": "ID of the question",
+            "question": "Question text",
+            "context": "Context of the paragraph",
+            "answers": {
+                "text": ["Answer text"],
+                "answer_start": 0
+            }
+        }
+    ]
+}
+```
+
+The resulting file will have the same structure as the custom format described above.
+
+
+
